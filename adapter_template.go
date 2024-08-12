@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/warpware/hypergo/funcs"
+	"github.com/hypergopher/hypergo/funcs"
 )
 
 // TemplateAdapter is a template adapter for the HyperGo framework that uses the Go html/template package.

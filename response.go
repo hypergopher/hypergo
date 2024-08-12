@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/warpware/hypergo/htmx"
-	"github.com/warpware/hypergo/htmx/trigger"
+	"github.com/hypergopher/hypergo/htmx"
+	"github.com/hypergopher/hypergo/htmx/trigger"
 )
 
 // Response represents a view response to an HTTP request

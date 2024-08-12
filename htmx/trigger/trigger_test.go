@@ -3,7 +3,7 @@ package trigger_test
 import (
 	"testing"
 
-	"github.com/warpware/hypergo/htmx/trigger"
+	"github.com/hypergopher/hypergo/htmx/trigger"
 )
 
 func TestTriggers_Encode(t *testing.T) {

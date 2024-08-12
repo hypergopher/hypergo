@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/warpware/hypergo/funcs"
+	"github.com/hypergopher/hypergo/funcs"
 )
 
 func TestSrcset(t *testing.T) {

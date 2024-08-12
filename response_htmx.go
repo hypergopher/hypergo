@@ -1,9 +1,9 @@
 package hypergo
 
 import (
-	"github.com/warpware/hypergo/htmx"
-	"github.com/warpware/hypergo/htmx/location"
-	"github.com/warpware/hypergo/htmx/swap"
+	"github.com/hypergopher/hypergo/htmx"
+	"github.com/hypergopher/hypergo/htmx/location"
+	"github.com/hypergopher/hypergo/htmx/swap"
 )
 
 // HxLocation sets the HX-Location header, which instructs the browser to navigate to the given path without reloading the page.

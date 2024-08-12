@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/warpware/hypergo/htmx/swap"
+	"github.com/hypergopher/hypergo/htmx/swap"
 )
 
 type Option func(*Location)

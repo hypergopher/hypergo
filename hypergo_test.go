@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/warpware/hypergo"
+	"github.com/hypergopher/hypergo"
 )
 
 type mockViewAdapter struct {

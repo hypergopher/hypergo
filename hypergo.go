@@ -12,8 +12,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/warpware/hypergo/htmx"
-	"github.com/warpware/hypergo/request"
+	"github.com/hypergopher/hypergo/htmx"
+	"github.com/hypergopher/hypergo/request"
 )
 
 // Option is a function that can be used to configure the HyperGo struct.

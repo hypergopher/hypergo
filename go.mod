@@ -1,3 +1,3 @@
-module github.com/warpware/hypergo
+module github.com/hypergopher/hypergo
 
 go 1.22.3

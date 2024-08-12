@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/warpware/hypergo/htmx"
-	"github.com/warpware/hypergo/request"
+	"github.com/hypergopher/hypergo/htmx"
+	"github.com/hypergopher/hypergo/request"
 )
 
 // Data is the struct that all view models must implement. It provides common data for all templates

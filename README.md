@@ -1,2 +1,5 @@
-# hypergo
-A fluent approach to creating HTTP responses with HTMX. Experimental. 
+# HyperGo
+
+HyperGo provides a fluent approach for building HTTP responses in Go, especially when working with HTMX. 
+
+Status: **Experimental**

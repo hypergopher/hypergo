@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/hypergopher/hypergo/constants"
 	"github.com/hypergopher/hypergo/funcs"
 )
 
@@ -74,7 +75,7 @@ func (a *TemplateAdapter) Init() error {
 					return err
 				}
 				pageName := strings.TrimSuffix(relPath, filepath.Ext(relPath))
-				if fsID != RootFSID {
+				if fsID != constants.RootFSID {
 					pageName = fsID + ":" + pageName
 				}
 
@@ -89,8 +90,8 @@ func (a *TemplateAdapter) Init() error {
 		}
 
 		// If the "views" directory exists, parse it. Otherwise, parse the root directory
-		if _, err := fsys.Open(ViewsDir); err == nil {
-			if err := fs.WalkDir(fsys, ViewsDir, processDirectory); err != nil {
+		if _, err := fsys.Open(constants.ViewsDir); err == nil {
+			if err := fs.WalkDir(fsys, constants.ViewsDir, processDirectory); err != nil {
 				return err
 			}
 		}
@@ -121,8 +122,8 @@ func (a *TemplateAdapter) loadPartials() (*template.Template, error) {
 		}
 
 		// If the "partials" directory exists, parse it
-		if _, err := fsys.Open(PartialsDir); err == nil {
-			if err := fs.WalkDir(fsys, PartialsDir, processPartials); err != nil {
+		if _, err := fsys.Open(constants.PartialsDir); err == nil {
+			if err := fs.WalkDir(fsys, constants.PartialsDir, processPartials); err != nil {
 				return nil, err
 			}
 		}

@@ -1,4 +1,4 @@
-package hypergo
+package response
 
 import (
 	"github.com/hypergopher/hypergo/htmx"

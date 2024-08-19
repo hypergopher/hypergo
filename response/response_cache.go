@@ -1,4 +1,4 @@
-package hypergo
+package response
 
 // NoCacheStrict sets the Cache-Control header to "no-cache, no-store, must-revalidate".
 func (resp *Response) NoCacheStrict() {

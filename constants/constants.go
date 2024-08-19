@@ -1,4 +1,4 @@
-package hypergo
+package constants
 
 type ContextKey string
 

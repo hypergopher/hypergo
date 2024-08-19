@@ -1,9 +1,10 @@
-package hypergo
+package response
 
 import (
 	"net/http"
 	"strings"
 
+	"github.com/hypergopher/hypergo/constants"
 	"github.com/hypergopher/hypergo/htmx"
 	"github.com/hypergopher/hypergo/htmx/trigger"
 )
@@ -31,13 +32,13 @@ type Response struct {
 
 func NewResponse() *Response {
 	return &Response{
+		data:       NewData(make(map[string]any)),
 		headers:    map[string]string{},
 		layout:     "",
 		path:       "",
 		statusCode: http.StatusOK,
 		title:      "",
 		triggers:   trigger.NewTriggers(),
-		data:       NewData(make(map[string]any)),
 	}
 }
 
@@ -173,8 +174,8 @@ func (resp *Response) Path(path string) *Response {
 		path = pathParts[1]
 	}
 
-	if !strings.HasPrefix(path, ViewsDir+"/") {
-		path = ViewsDir + "/" + path
+	if !strings.HasPrefix(path, constants.ViewsDir+"/") {
+		path = constants.ViewsDir + "/" + path
 	}
 
 	if len(pathParts) == 2 {
@@ -292,8 +293,7 @@ func (resp *Response) StatusStopPolling() *Response {
 }
 
 // Render is syntactic sugar for rendering the template with a view service. It's only purpose is to help you keep a fluent approach when rendering.
-//
 // Example: resp.StatusOK().Render(w, r, view)
-func (resp *Response) Render(w http.ResponseWriter, r *http.Request, view *HyperGo) {
-	view.Render(w, r, resp)
+func (resp *Response) Render(w http.ResponseWriter, r *http.Request, renderer Renderer) {
+	renderer.Render(w, r, resp)
 }

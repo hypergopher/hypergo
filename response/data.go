@@ -1,4 +1,4 @@
-package hypergo
+package response
 
 import (
 	"context"
@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/hypergopher/hypergo/constants"
 	"github.com/hypergopher/hypergo/htmx"
 	"github.com/hypergopher/hypergo/request"
 )
@@ -166,7 +167,7 @@ func (v *Data) CurrentYear() int {
 
 // Nonce returns the nonce value from the request context, if available.
 func (v *Data) Nonce() string {
-	nonce, ok := v.request.Context().Value(NonceContextKey).(string)
+	nonce, ok := v.request.Context().Value(constants.NonceContextKey).(string)
 	if ok {
 		return nonce
 	}

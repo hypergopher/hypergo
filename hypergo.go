@@ -12,8 +12,10 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/hypergopher/hypergo/constants"
 	"github.com/hypergopher/hypergo/htmx"
 	"github.com/hypergopher/hypergo/request"
+	"github.com/hypergopher/hypergo/response"
 )
 
 // Option is a function that can be used to configure the HyperGo struct.
@@ -108,7 +110,7 @@ func WithFuncMap(funcs template.FuncMap) Option {
 // WithBaseTemplateFS sets an initial template and assets filesystem to use for the template engine.
 func WithBaseTemplateFS(efs *embed.FS) Option {
 	return func(hgo *HyperGo) error {
-		hgo.filesystemMap = map[string]fs.FS{RootFSID: efs}
+		hgo.filesystemMap = map[string]fs.FS{constants.RootFSID: efs}
 		return nil
 	}
 }
@@ -168,7 +170,7 @@ func (s *HyperGo) RegisterAdapter(name string, adapter Adapter) error {
 	return s.adapters[name].Init()
 }
 
-// Reinit reinitialize the view service adapters
+// Reinit reinitialize the view service adapters. This is useful for reloading templates after they have changed.
 func (s *HyperGo) Reinit() error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -190,7 +192,7 @@ func (s *HyperGo) Adapter(name string) (Adapter, bool) {
 }
 
 // Render renders the specified opts with the provided adapter key
-func (s *HyperGo) Render(w http.ResponseWriter, r *http.Request, resp *Response) {
+func (s *HyperGo) Render(w http.ResponseWriter, r *http.Request, resp *response.Response) {
 	// First, find an extension if there is one
 	ext := ""
 	if idx := strings.LastIndex(resp.TemplatePath(), "."); idx != -1 {
@@ -215,7 +217,7 @@ func (s *HyperGo) Render(w http.ResponseWriter, r *http.Request, resp *Response)
 }
 
 // RenderAs renders the specified opts with the provided adapter key
-func (s *HyperGo) RenderAs(w http.ResponseWriter, r *http.Request, adapterKey string, resp *Response) {
+func (s *HyperGo) RenderAs(w http.ResponseWriter, r *http.Request, adapterKey string, resp *response.Response) {
 	if adapter, ok := s.adapterFor(w, adapterKey); ok {
 		// If there is no layout set, set the base layout
 		if resp.TemplateLayout() == "" {
@@ -300,7 +302,7 @@ func (s *HyperGo) RenderUnauthorizedAs(w http.ResponseWriter, r *http.Request, a
 
 // HxRedirect sends an HX-Redirect header to the client
 func (s *HyperGo) HxRedirect(w http.ResponseWriter, url string) {
-	w.Header().Set("HX-Redirect", url)
+	w.Header().Set(htmx.HXRedirect, url)
 	w.WriteHeader(http.StatusSeeOther)
 	_, _ = w.Write([]byte("redirecting..."))
 	return
@@ -328,24 +330,14 @@ func (s *HyperGo) Redirect(w http.ResponseWriter, r *http.Request, url string) {
 	http.Redirect(w, r, url, http.StatusFound)
 }
 
-func RedirectNoReplace(w http.ResponseWriter, r *http.Request, url string) {
-	if htmx.IsHtmxRequest(r) {
-		w.Header().Set("HX-Redirect", url)
-		w.WriteHeader(http.StatusSeeOther)
-		_, _ = w.Write([]byte("redirecting..."))
-		return
-	}
-	http.Redirect(w, r, url, http.StatusFound)
-}
-
 // NewResponse creates a new response with the given layout
-func (s *HyperGo) NewResponse(layout string) *Response {
-	return NewResponse().Layout(layout)
+func (s *HyperGo) NewResponse(layout string) *response.Response {
+	return response.NewResponse().Layout(layout)
 }
 
 // NewSystemResponse creates a new response with the system layout
-func (s *HyperGo) NewSystemResponse() *Response {
-	return NewResponse().Layout(s.systemLayout)
+func (s *HyperGo) NewSystemResponse() *response.Response {
+	return response.NewResponse().Layout(s.systemLayout)
 }
 
 // adapterFor returns the adapter for the specified key

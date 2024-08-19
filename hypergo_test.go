@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/hypergopher/hypergo"
+	"github.com/hypergopher/hypergo/response"
 )
 
 type mockViewAdapter struct {
@@ -14,20 +15,20 @@ type mockViewAdapter struct {
 }
 
 func (ma *mockViewAdapter) Init() error { return nil }
-func (ma *mockViewAdapter) Render(w http.ResponseWriter, r *http.Request, resp *hypergo.Response) {
+func (ma *mockViewAdapter) Render(w http.ResponseWriter, r *http.Request, resp *response.Response) {
 	ma.renderCalled = true
 }
-func (ma *mockViewAdapter) RenderForbidden(w http.ResponseWriter, r *http.Request, resp *hypergo.Response) {
+func (ma *mockViewAdapter) RenderForbidden(w http.ResponseWriter, r *http.Request, resp *response.Response) {
 }
-func (ma *mockViewAdapter) RenderMaintenance(w http.ResponseWriter, r *http.Request, resp *hypergo.Response) {
+func (ma *mockViewAdapter) RenderMaintenance(w http.ResponseWriter, r *http.Request, resp *response.Response) {
 }
-func (ma *mockViewAdapter) RenderMethodNotAllowed(w http.ResponseWriter, r *http.Request, resp *hypergo.Response) {
+func (ma *mockViewAdapter) RenderMethodNotAllowed(w http.ResponseWriter, r *http.Request, resp *response.Response) {
 }
-func (ma *mockViewAdapter) RenderNotFound(w http.ResponseWriter, r *http.Request, resp *hypergo.Response) {
+func (ma *mockViewAdapter) RenderNotFound(w http.ResponseWriter, r *http.Request, resp *response.Response) {
 }
-func (ma *mockViewAdapter) RenderSystemError(w http.ResponseWriter, r *http.Request, err error, resp *hypergo.Response) {
+func (ma *mockViewAdapter) RenderSystemError(w http.ResponseWriter, r *http.Request, err error, resp *response.Response) {
 }
-func (ma *mockViewAdapter) RenderUnauthorized(w http.ResponseWriter, r *http.Request, resp *hypergo.Response) {
+func (ma *mockViewAdapter) RenderUnauthorized(w http.ResponseWriter, r *http.Request, resp *response.Response) {
 }
 
 func TestViewService_RegisterAdapter(t *testing.T) {
@@ -179,37 +180,37 @@ func TestViewService_Render(t *testing.T) {
 
 	tests := []struct {
 		name        string
-		resp        *hypergo.Response
+		resp        *response.Response
 		wantErr     bool
 		wantAdapter hypergo.Adapter
 	}{
 		{
 			name:        "HTMLRenderWithExtension",
-			resp:        hypergo.NewResponse().Path("sample.html"),
+			resp:        response.NewResponse().Path("sample.html"),
 			wantErr:     false,
 			wantAdapter: mockedAdapter,
 		},
 		{
 			name:        "HTMLRenderWithoutExtension",
-			resp:        hypergo.NewResponse().Path("sample"),
+			resp:        response.NewResponse().Path("sample"),
 			wantErr:     false,
 			wantAdapter: mockedAdapter,
 		},
 		{
 			name:        "JSONRender",
-			resp:        hypergo.NewResponse().Path("sample.json"),
+			resp:        response.NewResponse().Path("sample.json"),
 			wantErr:     false,
 			wantAdapter: mockedJSONAdapter,
 		},
 		{
 			name:        "JSONResponseWithHeader",
-			resp:        hypergo.NewResponse().Path("sample").Header("Content-Type", "application/json"),
+			resp:        response.NewResponse().Path("sample").Header("Content-Type", "application/json"),
 			wantErr:     false,
 			wantAdapter: mockedJSONAdapter,
 		},
 		{
 			name:        "NonHTMLRender",
-			resp:        hypergo.NewResponse().Path("sample.pdf"),
+			resp:        response.NewResponse().Path("sample.pdf"),
 			wantErr:     true,
 			wantAdapter: nil,
 		},

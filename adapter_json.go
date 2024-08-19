@@ -2,6 +2,8 @@ package hypergo
 
 import (
 	"net/http"
+
+	"github.com/hypergopher/hypergo/response"
 )
 
 // JSONAdapter is an adapter for rendering JSON responses.
@@ -16,7 +18,7 @@ func (v *JSONAdapter) Init() error {
 	return nil
 }
 
-func (v *JSONAdapter) Render(w http.ResponseWriter, r *http.Request, resp *Response) {
+func (v *JSONAdapter) Render(w http.ResponseWriter, r *http.Request, resp *response.Response) {
 	if resp.StatusCode() == 0 {
 		resp.Status(http.StatusOK)
 	}
@@ -35,42 +37,42 @@ func (v *JSONAdapter) Render(w http.ResponseWriter, r *http.Request, resp *Respo
 	}
 }
 
-func (v *JSONAdapter) RenderForbidden(w http.ResponseWriter, _ *http.Request, _ *Response) {
+func (v *JSONAdapter) RenderForbidden(w http.ResponseWriter, _ *http.Request, _ *response.Response) {
 	err := JSONFailure(w, nil, "Forbidden", http.StatusForbidden, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
-func (v *JSONAdapter) RenderMaintenance(w http.ResponseWriter, _ *http.Request, _ *Response) {
+func (v *JSONAdapter) RenderMaintenance(w http.ResponseWriter, _ *http.Request, _ *response.Response) {
 	err := JSONFailure(w, nil, "Maintenance", http.StatusServiceUnavailable, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
-func (v *JSONAdapter) RenderMethodNotAllowed(w http.ResponseWriter, _ *http.Request, _ *Response) {
+func (v *JSONAdapter) RenderMethodNotAllowed(w http.ResponseWriter, _ *http.Request, _ *response.Response) {
 	err := JSONFailure(w, nil, "Method not allowed", http.StatusMethodNotAllowed, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
-func (v *JSONAdapter) RenderNotFound(w http.ResponseWriter, _ *http.Request, _ *Response) {
+func (v *JSONAdapter) RenderNotFound(w http.ResponseWriter, _ *http.Request, _ *response.Response) {
 	err := JSONFailure(w, nil, "Not found", http.StatusNotFound, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
-func (v *JSONAdapter) RenderSystemError(w http.ResponseWriter, _ *http.Request, err error, _ *Response) {
+func (v *JSONAdapter) RenderSystemError(w http.ResponseWriter, _ *http.Request, err error, _ *response.Response) {
 	e := JSONError(w, err.Error(), http.StatusInternalServerError, nil)
 	if e != nil {
 		http.Error(w, e.Error(), http.StatusInternalServerError)
 	}
 }
 
-func (v *JSONAdapter) RenderUnauthorized(w http.ResponseWriter, _ *http.Request, _ *Response) {
+func (v *JSONAdapter) RenderUnauthorized(w http.ResponseWriter, _ *http.Request, _ *response.Response) {
 	err := JSONFailure(w, nil, "Unauthorized", http.StatusUnauthorized, nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

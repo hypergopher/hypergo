@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/hypergopher/hyperview/htmx/swap"
+	"github.com/hypergopher/renderfish/htmx/swap"
 )
 
 type Option func(*Location)

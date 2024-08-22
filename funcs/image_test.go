@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/hypergopher/hyperview/funcs"
+	"github.com/hypergopher/renderfish/funcs"
 )
 
 func TestSrcset(t *testing.T) {

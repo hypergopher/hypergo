@@ -1,9 +1,9 @@
-package hyperview
+package renderfish
 
 import (
 	"net/http"
 
-	"github.com/hypergopher/hyperview/response"
+	"github.com/hypergopher/renderfish/response"
 )
 
 // Adapter is an interface for rendering templates with various template engines.

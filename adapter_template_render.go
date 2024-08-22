@@ -1,4 +1,4 @@
-package hyperview
+package renderfish
 
 import (
 	"bytes"
@@ -9,8 +9,8 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/hypergopher/hyperview/constants"
-	"github.com/hypergopher/hyperview/response"
+	"github.com/hypergopher/renderfish/constants"
+	"github.com/hypergopher/renderfish/response"
 )
 
 func (a *TemplateAdapter) Render(w http.ResponseWriter, r *http.Request, resp *response.Response) {

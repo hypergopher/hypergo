@@ -1,9 +1,9 @@
 package response
 
 import (
-	"github.com/hypergopher/hyperview/htmx"
-	"github.com/hypergopher/hyperview/htmx/location"
-	"github.com/hypergopher/hyperview/htmx/swap"
+	"github.com/hypergopher/renderfish/htmx"
+	"github.com/hypergopher/renderfish/htmx/location"
+	"github.com/hypergopher/renderfish/htmx/swap"
 )
 
 // HxLocation sets the HX-Location header, which instructs the browser to navigate to the given path without reloading the page.

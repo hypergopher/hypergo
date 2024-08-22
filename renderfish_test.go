@@ -1,4 +1,4 @@
-package hyperview_test
+package renderfish_test
 
 import (
 	"net/http"
@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/hypergopher/hyperview"
-	"github.com/hypergopher/hyperview/response"
+	"github.com/hypergopher/renderfish"
+	"github.com/hypergopher/renderfish/response"
 )
 
 type mockViewAdapter struct {
@@ -32,9 +32,9 @@ func (ma *mockViewAdapter) RenderUnauthorized(w http.ResponseWriter, r *http.Req
 }
 
 func TestViewService_RegisterAdapter(t *testing.T) {
-	hgo, err := hyperview.NewHyperView()
+	hgo, err := renderfish.NewRenderFish()
 	if err != nil {
-		t.Fatalf("error creating HyperView: %v", err)
+		t.Fatalf("error creating RenderFish: %v", err)
 	}
 
 	adapter1 := &mockViewAdapter{}
@@ -44,7 +44,7 @@ func TestViewService_RegisterAdapter(t *testing.T) {
 	tests := []struct {
 		name    string
 		key     string
-		adapter hyperview.Adapter
+		adapter renderfish.Adapter
 	}{
 		{
 			name:    "Test Case 1: Single Registration",
@@ -82,9 +82,9 @@ func TestViewService_RegisterAdapter(t *testing.T) {
 }
 
 func TestViewService_Redirect(t *testing.T) {
-	hgo, err := hyperview.NewHyperView()
+	hgo, err := renderfish.NewRenderFish()
 	if err != nil {
-		t.Fatalf("error creating HyperView: %v", err)
+		t.Fatalf("error creating RenderFish: %v", err)
 	}
 
 	var tests = []struct {
@@ -160,9 +160,9 @@ func TestViewService_Redirect(t *testing.T) {
 }
 
 func TestViewService_Render(t *testing.T) {
-	hgo, err := hyperview.NewHyperView()
+	hgo, err := renderfish.NewRenderFish()
 	if err != nil {
-		t.Fatalf("error creating HyperView: %v", err)
+		t.Fatalf("error creating RenderFish: %v", err)
 	}
 
 	mockedAdapter := &mockViewAdapter{}
@@ -182,7 +182,7 @@ func TestViewService_Render(t *testing.T) {
 		name        string
 		resp        *response.Response
 		wantErr     bool
-		wantAdapter hyperview.Adapter
+		wantAdapter renderfish.Adapter
 	}{
 		{
 			name:        "HTMLRenderWithExtension",

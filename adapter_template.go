@@ -1,4 +1,4 @@
-package hyperview
+package renderfish
 
 import (
 	"fmt"
@@ -8,11 +8,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/hypergopher/hyperview/constants"
-	"github.com/hypergopher/hyperview/funcs"
+	"github.com/hypergopher/renderfish/constants"
+	"github.com/hypergopher/renderfish/funcs"
 )
 
-// TemplateAdapter is a template adapter for the HyperView framework that uses the Go html/template package.
+// TemplateAdapter is a template adapter for the RenderFish framework that uses the Go html/template package.
 type TemplateAdapter struct {
 	extension     string
 	fileSystemMap map[string]fs.FS

@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hypergopher/hyperview/htmx/swap"
+	"github.com/hypergopher/renderfish/htmx/swap"
 )
 
 type swapTest struct {

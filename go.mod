@@ -1,3 +1,3 @@
-module github.com/hypergopher/hyperview
+module github.com/hypergopher/renderfish
 
 go 1.23

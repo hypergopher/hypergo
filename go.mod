@@ -1,3 +1,3 @@
-module github.com/hypergopher/hypergo
+module github.com/hypergopher/hyperview
 
 go 1.23

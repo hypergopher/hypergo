@@ -1,4 +1,4 @@
-package hypergo_test
+package hyperview_test
 
 import (
 	"net/http"
@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/hypergopher/hypergo"
-	"github.com/hypergopher/hypergo/response"
+	"github.com/hypergopher/hyperview"
+	"github.com/hypergopher/hyperview/response"
 )
 
 type mockViewAdapter struct {
@@ -32,9 +32,9 @@ func (ma *mockViewAdapter) RenderUnauthorized(w http.ResponseWriter, r *http.Req
 }
 
 func TestViewService_RegisterAdapter(t *testing.T) {
-	hgo, err := hypergo.NewHyperGo()
+	hgo, err := hyperview.NewHyperView()
 	if err != nil {
-		t.Fatalf("error creating HyperGo: %v", err)
+		t.Fatalf("error creating HyperView: %v", err)
 	}
 
 	adapter1 := &mockViewAdapter{}
@@ -44,7 +44,7 @@ func TestViewService_RegisterAdapter(t *testing.T) {
 	tests := []struct {
 		name    string
 		key     string
-		adapter hypergo.Adapter
+		adapter hyperview.Adapter
 	}{
 		{
 			name:    "Test Case 1: Single Registration",
@@ -82,9 +82,9 @@ func TestViewService_RegisterAdapter(t *testing.T) {
 }
 
 func TestViewService_Redirect(t *testing.T) {
-	hgo, err := hypergo.NewHyperGo()
+	hgo, err := hyperview.NewHyperView()
 	if err != nil {
-		t.Fatalf("error creating HyperGo: %v", err)
+		t.Fatalf("error creating HyperView: %v", err)
 	}
 
 	var tests = []struct {
@@ -160,9 +160,9 @@ func TestViewService_Redirect(t *testing.T) {
 }
 
 func TestViewService_Render(t *testing.T) {
-	hgo, err := hypergo.NewHyperGo()
+	hgo, err := hyperview.NewHyperView()
 	if err != nil {
-		t.Fatalf("error creating HyperGo: %v", err)
+		t.Fatalf("error creating HyperView: %v", err)
 	}
 
 	mockedAdapter := &mockViewAdapter{}
@@ -182,7 +182,7 @@ func TestViewService_Render(t *testing.T) {
 		name        string
 		resp        *response.Response
 		wantErr     bool
-		wantAdapter hypergo.Adapter
+		wantAdapter hyperview.Adapter
 	}{
 		{
 			name:        "HTMLRenderWithExtension",

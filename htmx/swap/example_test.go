@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/hypergopher/hypergo/htmx/swap"
+	"github.com/hypergopher/hyperview/htmx/swap"
 )
 
 func ExampleInnerHTML() {

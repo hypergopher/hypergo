@@ -1,9 +1,9 @@
-package hypergo
+package hyperview
 
 import (
 	"net/http"
 
-	"github.com/hypergopher/hypergo/response"
+	"github.com/hypergopher/hyperview/response"
 )
 
 // JSONAdapter is an adapter for rendering JSON responses.

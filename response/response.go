@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/hypergopher/hypergo/constants"
-	"github.com/hypergopher/hypergo/htmx"
-	"github.com/hypergopher/hypergo/htmx/trigger"
+	"github.com/hypergopher/hyperview/constants"
+	"github.com/hypergopher/hyperview/htmx"
+	"github.com/hypergopher/hyperview/htmx/trigger"
 )
 
 // Response represents a view response to an HTTP request

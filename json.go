@@ -1,4 +1,4 @@
-package hypergo
+package hyperview
 
 import (
 	"encoding/json"

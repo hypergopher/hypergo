@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/hypergopher/hypergo/constants"
-	"github.com/hypergopher/hypergo/htmx"
-	"github.com/hypergopher/hypergo/request"
+	"github.com/hypergopher/hyperview/constants"
+	"github.com/hypergopher/hyperview/htmx"
+	"github.com/hypergopher/hyperview/request"
 )
 
 // Data is the struct that all view models must implement. It provides common data for all templates
@@ -34,7 +34,7 @@ type Data struct {
 }
 
 // NewData creates a new Data instance.
-// If you are using this outside the normal HyperGo rendering process, be sure to set the request manually
+// If you are using this outside the normal HyperView rendering process, be sure to set the request manually
 // via Data.SetRequest as the request is deliberately set later in the normal rendering flow.
 func NewData(pageData map[string]any) *Data {
 	pageData = initData(pageData)

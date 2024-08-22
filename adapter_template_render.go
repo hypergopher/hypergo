@@ -1,4 +1,4 @@
-package hypergo
+package hyperview
 
 import (
 	"bytes"
@@ -9,8 +9,8 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/hypergopher/hypergo/constants"
-	"github.com/hypergopher/hypergo/response"
+	"github.com/hypergopher/hyperview/constants"
+	"github.com/hypergopher/hyperview/response"
 )
 
 func (a *TemplateAdapter) Render(w http.ResponseWriter, r *http.Request, resp *response.Response) {

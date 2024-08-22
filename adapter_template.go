@@ -1,4 +1,4 @@
-package hypergo
+package hyperview
 
 import (
 	"fmt"
@@ -8,11 +8,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/hypergopher/hypergo/constants"
-	"github.com/hypergopher/hypergo/funcs"
+	"github.com/hypergopher/hyperview/constants"
+	"github.com/hypergopher/hyperview/funcs"
 )
 
-// TemplateAdapter is a template adapter for the HyperGo framework that uses the Go html/template package.
+// TemplateAdapter is a template adapter for the HyperView framework that uses the Go html/template package.
 type TemplateAdapter struct {
 	extension     string
 	fileSystemMap map[string]fs.FS

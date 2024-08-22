@@ -3,8 +3,8 @@ package location_test
 import (
 	"testing"
 
-	"github.com/hypergopher/hypergo/htmx/location"
-	"github.com/hypergopher/hypergo/htmx/swap"
+	"github.com/hypergopher/hyperview/htmx/location"
+	"github.com/hypergopher/hyperview/htmx/swap"
 )
 
 func TestLocation_Encode(t *testing.T) {

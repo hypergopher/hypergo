@@ -3,7 +3,7 @@ package constants
 type ContextKey string
 
 const (
-	NonceContextKey ContextKey = "HyperGoNonce"
+	NonceContextKey ContextKey = "HyperViewNonce"
 )
 
 const (

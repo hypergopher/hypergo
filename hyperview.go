@@ -1,4 +1,4 @@
-package renderfish
+package hyperview
 
 import (
 	"embed"
@@ -12,17 +12,17 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/hypergopher/renderfish/constants"
-	"github.com/hypergopher/renderfish/htmx"
-	"github.com/hypergopher/renderfish/request"
-	"github.com/hypergopher/renderfish/response"
+	"github.com/hypergopher/hyperview/constants"
+	"github.com/hypergopher/hyperview/htmx"
+	"github.com/hypergopher/hyperview/request"
+	"github.com/hypergopher/hyperview/response"
 )
 
-// Option is a function that can be used to configure the RenderFish struct.
-type Option func(*RenderFish) error
+// Option is a function that can be used to configure the HyperView struct.
+type Option func(*HyperView) error
 
-// RenderFish provides a service to render views from different template adapters.
-type RenderFish struct {
+// HyperView provides a service to render views from different template adapters.
+type HyperView struct {
 	adapters      map[string]Adapter // map of view adapters
 	baseLayout    string             // default layout to use if none is specified
 	systemLayout  string             // layout to use for system pages
@@ -32,18 +32,18 @@ type RenderFish struct {
 	mu            sync.RWMutex       // protects the adapters map
 }
 
-// NewRenderFish creates a new view service. It accepts a list of options to configure the view service.
+// NewHyperView creates a new view service. It accepts a list of options to configure the view service.
 //
 // Available options:
 //
 //   - WithLayouts: sets the base and system layouts for the view service.
 //   - WithFuncMap: sets an initial function map to use for the template engine.
 //   - WithBaseTemplateFS: sets an initial template and assets filesystem to use for the template engine.
-//   - WithLogger: sets an initial logger to use for the RenderFish instance. If not set, a default logger is created when the RenderFish instance is created.
+//   - WithLogger: sets an initial logger to use for the HyperView instance. If not set, a default logger is created when the HyperView instance is created.
 //   - WithViewAdapter: sets a view adapter to use for the view service. If no view adapters are set, the default adapters are used. Default adapters
 //     use html/template for html templates and json for json templates.
-func NewRenderFish(options ...Option) (*RenderFish, error) {
-	hgo := &RenderFish{
+func NewHyperView(options ...Option) (*HyperView, error) {
+	hgo := &HyperView{
 		adapters:      make(map[string]Adapter),
 		baseLayout:    "base",
 		systemLayout:  "base",
@@ -91,7 +91,7 @@ func NewRenderFish(options ...Option) (*RenderFish, error) {
 
 // WithLayouts sets the base and system layouts for the view service.
 func WithLayouts(base, system string) Option {
-	return func(hgo *RenderFish) error {
+	return func(hgo *HyperView) error {
 		hgo.baseLayout = base
 		hgo.systemLayout = system
 		return nil
@@ -101,7 +101,7 @@ func WithLayouts(base, system string) Option {
 // WithFuncMap sets an initial function map to use for the template engine.
 // Additional functions can be added later via Plugin options.
 func WithFuncMap(funcs template.FuncMap) Option {
-	return func(hgo *RenderFish) error {
+	return func(hgo *HyperView) error {
 		hgo.funcMap = funcs
 		return nil
 	}
@@ -109,15 +109,15 @@ func WithFuncMap(funcs template.FuncMap) Option {
 
 // WithBaseTemplateFS sets an initial template and assets filesystem to use for the template engine.
 func WithBaseTemplateFS(efs *embed.FS) Option {
-	return func(hgo *RenderFish) error {
+	return func(hgo *HyperView) error {
 		hgo.filesystemMap = map[string]fs.FS{constants.RootFSID: efs}
 		return nil
 	}
 }
 
-// WithLogger sets an initial logger to use for the RenderFish instance. If not set, a default logger is created when the RenderFish instance is created.
+// WithLogger sets an initial logger to use for the HyperView instance. If not set, a default logger is created when the HyperView instance is created.
 func WithLogger(logger *slog.Logger) Option {
-	return func(hgo *RenderFish) error {
+	return func(hgo *HyperView) error {
 		hgo.logger = logger
 		return nil
 	}
@@ -125,20 +125,20 @@ func WithLogger(logger *slog.Logger) Option {
 
 // WithViewAdapter sets a view adapter to use for the view service. If no view adapters are set, the default adapters are used.
 func WithViewAdapter(name string, adapter Adapter) Option {
-	return func(hgo *RenderFish) error {
+	return func(hgo *HyperView) error {
 		return hgo.RegisterAdapter(name, adapter)
 	}
 }
 
 // Logger provides access to the logger, so that plugins can use it.
-func (s *RenderFish) Logger() *slog.Logger {
+func (s *HyperView) Logger() *slog.Logger {
 	return s.logger
 }
 
 // MaybeRegisterDefaultAdapters registers the built-in adapters for
 // using html/template for html templates and json for json templates, but only
 // if they are not already registered.
-func (s *RenderFish) MaybeRegisterDefaultAdapters() error {
+func (s *HyperView) MaybeRegisterDefaultAdapters() error {
 	// Check if the html adapter is already registered
 	if _, ok := s.adapters["html"]; !ok {
 		tempAdapter := NewTemplateViewAdapter(TemplateViewAdapterOptions{
@@ -163,7 +163,7 @@ func (s *RenderFish) MaybeRegisterDefaultAdapters() error {
 }
 
 // RegisterAdapter registers a new view adapter with the view service
-func (s *RenderFish) RegisterAdapter(name string, adapter Adapter) error {
+func (s *HyperView) RegisterAdapter(name string, adapter Adapter) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.adapters[name] = adapter
@@ -171,7 +171,7 @@ func (s *RenderFish) RegisterAdapter(name string, adapter Adapter) error {
 }
 
 // Reinit reinitialize the view service adapters. This is useful for reloading templates after they have changed.
-func (s *RenderFish) Reinit() error {
+func (s *HyperView) Reinit() error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	for _, adapter := range s.adapters {
@@ -184,7 +184,7 @@ func (s *RenderFish) Reinit() error {
 }
 
 // Adapter returns the view adapter with the specified name
-func (s *RenderFish) Adapter(name string) (Adapter, bool) {
+func (s *HyperView) Adapter(name string) (Adapter, bool) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 	adapter, ok := s.adapters[name]
@@ -192,7 +192,7 @@ func (s *RenderFish) Adapter(name string) (Adapter, bool) {
 }
 
 // Render renders the specified opts with the provided adapter key
-func (s *RenderFish) Render(w http.ResponseWriter, r *http.Request, resp *response.Response) {
+func (s *HyperView) Render(w http.ResponseWriter, r *http.Request, resp *response.Response) {
 	// First, find an extension if there is one
 	ext := ""
 	if idx := strings.LastIndex(resp.TemplatePath(), "."); idx != -1 {
@@ -217,7 +217,7 @@ func (s *RenderFish) Render(w http.ResponseWriter, r *http.Request, resp *respon
 }
 
 // RenderAs renders the specified opts with the provided adapter key
-func (s *RenderFish) RenderAs(w http.ResponseWriter, r *http.Request, adapterKey string, resp *response.Response) {
+func (s *HyperView) RenderAs(w http.ResponseWriter, r *http.Request, adapterKey string, resp *response.Response) {
 	if adapter, ok := s.adapterFor(w, adapterKey); ok {
 		// If there is no layout set, set the base layout
 		if resp.TemplateLayout() == "" {
@@ -228,24 +228,24 @@ func (s *RenderFish) RenderAs(w http.ResponseWriter, r *http.Request, adapterKey
 }
 
 // RenderNotFound renders a 404 not found page
-func (s *RenderFish) RenderNotFound(w http.ResponseWriter, r *http.Request) {
+func (s *HyperView) RenderNotFound(w http.ResponseWriter, r *http.Request) {
 	s.RenderNotFoundAs(w, r, "html")
 }
 
 // RenderNotFoundAs renders a 404 not found page as the specified adapter
-func (s *RenderFish) RenderNotFoundAs(w http.ResponseWriter, r *http.Request, adapterKey string) {
+func (s *HyperView) RenderNotFoundAs(w http.ResponseWriter, r *http.Request, adapterKey string) {
 	if adapter, ok := s.adapterFor(w, adapterKey); ok {
 		adapter.RenderNotFound(w, r, s.NewSystemResponse().StatusNotFound())
 	}
 }
 
 // RenderSystemError renders a system error page
-func (s *RenderFish) RenderSystemError(w http.ResponseWriter, r *http.Request, err error) {
+func (s *HyperView) RenderSystemError(w http.ResponseWriter, r *http.Request, err error) {
 	s.RenderSystemErrorAs(w, r, "html", err)
 }
 
 // RenderSystemErrorAs renders a system error page as the specified adapter
-func (s *RenderFish) RenderSystemErrorAs(w http.ResponseWriter, r *http.Request, adapterKey string, err error) {
+func (s *HyperView) RenderSystemErrorAs(w http.ResponseWriter, r *http.Request, adapterKey string, err error) {
 	s.logger.Error("Server error", slog.String("err", err.Error()))
 	if adapter, ok := s.adapterFor(w, adapterKey); ok {
 		adapter.RenderSystemError(w, r, err, s.NewSystemResponse().StatusError())
@@ -253,55 +253,55 @@ func (s *RenderFish) RenderSystemErrorAs(w http.ResponseWriter, r *http.Request,
 }
 
 // RenderMaintenance renders a maintenance page
-func (s *RenderFish) RenderMaintenance(w http.ResponseWriter, r *http.Request) {
+func (s *HyperView) RenderMaintenance(w http.ResponseWriter, r *http.Request) {
 	s.RenderMaintenanceAs(w, r, "html")
 }
 
 // RenderMaintenanceAs renders a maintenance page as the specified adapter
-func (s *RenderFish) RenderMaintenanceAs(w http.ResponseWriter, r *http.Request, adapterKey string) {
+func (s *HyperView) RenderMaintenanceAs(w http.ResponseWriter, r *http.Request, adapterKey string) {
 	if adapter, ok := s.adapterFor(w, adapterKey); ok {
 		adapter.RenderMaintenance(w, r, s.NewSystemResponse().Status(http.StatusServiceUnavailable))
 	}
 }
 
 // RenderForbidden renders a forbidden page
-func (s *RenderFish) RenderForbidden(w http.ResponseWriter, r *http.Request) {
+func (s *HyperView) RenderForbidden(w http.ResponseWriter, r *http.Request) {
 	s.RenderForbiddenAs(w, r, "html")
 }
 
 // RenderForbiddenAs renders a forbidden page as the specified adapter
-func (s *RenderFish) RenderForbiddenAs(w http.ResponseWriter, r *http.Request, adapterKey string) {
+func (s *HyperView) RenderForbiddenAs(w http.ResponseWriter, r *http.Request, adapterKey string) {
 	if adapter, ok := s.adapterFor(w, adapterKey); ok {
 		adapter.RenderForbidden(w, r, s.NewSystemResponse().StatusForbidden())
 	}
 }
 
 // RenderMethodNotAllowed renders a method not allowed page
-func (s *RenderFish) RenderMethodNotAllowed(w http.ResponseWriter, r *http.Request) {
+func (s *HyperView) RenderMethodNotAllowed(w http.ResponseWriter, r *http.Request) {
 	s.RenderMethodNotAllowedAs(w, r, "html")
 }
 
 // RenderMethodNotAllowedAs renders a method not allowed page as the specified adapter
-func (s *RenderFish) RenderMethodNotAllowedAs(w http.ResponseWriter, r *http.Request, adapterKey string) {
+func (s *HyperView) RenderMethodNotAllowedAs(w http.ResponseWriter, r *http.Request, adapterKey string) {
 	if adapter, ok := s.adapterFor(w, adapterKey); ok {
 		adapter.RenderMethodNotAllowed(w, r, s.NewSystemResponse().Status(http.StatusMethodNotAllowed))
 	}
 }
 
 // RenderUnauthorized renders an unauthorized page
-func (s *RenderFish) RenderUnauthorized(w http.ResponseWriter, r *http.Request) {
+func (s *HyperView) RenderUnauthorized(w http.ResponseWriter, r *http.Request) {
 	s.RenderUnauthorizedAs(w, r, "html")
 }
 
 // RenderUnauthorizedAs renders an unauthorized page as the specified adapter
-func (s *RenderFish) RenderUnauthorizedAs(w http.ResponseWriter, r *http.Request, adapterKey string) {
+func (s *HyperView) RenderUnauthorizedAs(w http.ResponseWriter, r *http.Request, adapterKey string) {
 	if adapter, ok := s.adapterFor(w, adapterKey); ok {
 		adapter.RenderUnauthorized(w, r, s.NewSystemResponse().StatusUnauthorized())
 	}
 }
 
 // HxRedirect sends an HX-Redirect header to the client
-func (s *RenderFish) HxRedirect(w http.ResponseWriter, url string) {
+func (s *HyperView) HxRedirect(w http.ResponseWriter, url string) {
 	w.Header().Set(htmx.HXRedirect, url)
 	w.WriteHeader(http.StatusSeeOther)
 	_, _ = w.Write([]byte("redirecting..."))
@@ -309,7 +309,7 @@ func (s *RenderFish) HxRedirect(w http.ResponseWriter, url string) {
 }
 
 // Redirect sends a redirect response to the client
-func (s *RenderFish) Redirect(w http.ResponseWriter, r *http.Request, url string) {
+func (s *HyperView) Redirect(w http.ResponseWriter, r *http.Request, url string) {
 	if htmx.IsHtmxRequest(r) {
 		s.HxRedirect(w, url)
 		return
@@ -331,17 +331,17 @@ func (s *RenderFish) Redirect(w http.ResponseWriter, r *http.Request, url string
 }
 
 // NewResponse creates a new response with the given layout
-func (s *RenderFish) NewResponse(layout string) *response.Response {
+func (s *HyperView) NewResponse(layout string) *response.Response {
 	return response.NewResponse().Layout(layout)
 }
 
 // NewSystemResponse creates a new response with the system layout
-func (s *RenderFish) NewSystemResponse() *response.Response {
+func (s *HyperView) NewSystemResponse() *response.Response {
 	return response.NewResponse().Layout(s.systemLayout)
 }
 
 // adapterFor returns the adapter for the specified key
-func (s *RenderFish) adapterFor(w http.ResponseWriter, key string) (Adapter, bool) {
+func (s *HyperView) adapterFor(w http.ResponseWriter, key string) (Adapter, bool) {
 	if key == "" {
 		key = "html"
 	}

@@ -3,7 +3,7 @@ package trigger_test
 import (
 	"testing"
 
-	"github.com/hypergopher/renderfish/htmx/trigger"
+	"github.com/hypergopher/hyperview/htmx/trigger"
 )
 
 func TestTriggers_Encode(t *testing.T) {

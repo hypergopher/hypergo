@@ -5,8 +5,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/hypergopher/renderfish/htmx"
-	"github.com/hypergopher/renderfish/request"
+	"github.com/hypergopher/hyperview/htmx"
+	"github.com/hypergopher/hyperview/request"
 )
 
 func assertEqual(t *testing.T, want, got string) {

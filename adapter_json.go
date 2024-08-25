@@ -1,9 +1,9 @@
-package renderfish
+package hyperview
 
 import (
 	"net/http"
 
-	"github.com/hypergopher/renderfish/response"
+	"github.com/hypergopher/hyperview/response"
 )
 
 // JSONAdapter is an adapter for rendering JSON responses.

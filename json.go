@@ -1,4 +1,4 @@
-package renderfish
+package hyperview
 
 import (
 	"encoding/json"

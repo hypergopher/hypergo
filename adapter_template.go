@@ -23,7 +23,7 @@ type TemplateAdapter struct {
 
 // TemplateViewAdapterOptions are the options for the TemplateAdapter.
 type TemplateViewAdapterOptions struct {
-	// Extension is the file extension for the templates. Default is ".gtml".
+	// Extension is the file extension for the templates. Default is ".html".
 	Extension string
 	// FileSystemMap is a map of file systems to use for the templates.
 	FileSystemMap map[string]fs.FS
@@ -41,7 +41,7 @@ func NewTemplateViewAdapter(opts TemplateViewAdapterOptions) *TemplateAdapter {
 	}
 
 	if opts.Extension == "" {
-		opts.Extension = ".gtml"
+		opts.Extension = ".html"
 	}
 
 	return &TemplateAdapter{

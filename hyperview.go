@@ -72,18 +72,8 @@ func NewHyperView(options ...Option) (*HyperView, error) {
 		}))
 	}
 
-	// If there is no adapter for html, use the default html adapter
-	if _, ok := hgo.adapters["html"]; !ok {
-		tempAdapter := NewTemplateViewAdapter(TemplateViewAdapterOptions{
-			Extension:     ".tmpl",
-			FileSystemMap: hgo.filesystemMap,
-			Funcs:         hgo.funcMap,
-			Logger:        hgo.logger,
-		})
-
-		if err := hgo.RegisterAdapter("html", tempAdapter); err != nil {
-			return nil, fmt.Errorf("error registering default HTML adapter: %w", err)
-		}
+	if err := hgo.MaybeRegisterDefaultAdapters(); err != nil {
+		return nil, fmt.Errorf("error registering default adapters: %w", err)
 	}
 
 	return hgo, nil
@@ -137,11 +127,12 @@ func (s *HyperView) Logger() *slog.Logger {
 
 // MaybeRegisterDefaultAdapters registers the built-in adapters for
 // using html/template for html templates and json for json templates, but only
-// if they are not already registered.
+// if they are not already registered. The ext parameter is used to determine the file extension for the html template adapter.
 func (s *HyperView) MaybeRegisterDefaultAdapters() error {
 	// Check if the html adapter is already registered
 	if _, ok := s.adapters["html"]; !ok {
 		tempAdapter := NewTemplateViewAdapter(TemplateViewAdapterOptions{
+			Extension:     ".html",
 			FileSystemMap: s.filesystemMap,
 			Funcs:         s.funcMap,
 			Logger:        s.logger,
@@ -159,6 +150,7 @@ func (s *HyperView) MaybeRegisterDefaultAdapters() error {
 			return fmt.Errorf("error registering default JSON adapter: %w", err)
 		}
 	}
+
 	return nil
 }
 

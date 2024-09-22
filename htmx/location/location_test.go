@@ -20,7 +20,7 @@ func TestLocation_Encode(t *testing.T) {
 		},
 		{
 			name: "simple",
-			//hxl:  location.Location{Path: "/testpath", Event: "click"},
+			// hxl:  location.Location{Path: "/testpath", Event: "click"},
 			hxl:  location.NewLocation("/testpath", location.Event("click")),
 			want: `{"path":"/testpath","event":"click"}`,
 		},

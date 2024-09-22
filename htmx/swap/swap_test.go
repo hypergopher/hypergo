@@ -10,7 +10,7 @@ import (
 type swapTest struct {
 	name     string
 	swapFunc func() *swap.Style
-	//swapOptions func(*swap.Style) *swap.Style
+	// swapOptions func(*swap.Style) *swap.Style
 	expected string
 }
 

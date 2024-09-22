@@ -67,7 +67,7 @@ func InputAttrs(nameID string, attrs ...any) (map[string]any, error) {
 		"Type":   "text",
 	}
 
-	//attributes := make(map[string]string)
+	// attributes := make(map[string]string)
 	specialAttrs := map[string]string{
 		"error": "Error",
 		"hint":  "Hint",

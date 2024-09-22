@@ -114,7 +114,6 @@ func NewLocation(path string, opt ...Option) *Location {
 
 // String encodes the Location struct into a json string
 func (hxl *Location) String() string {
-
 	// If path is empty, then return an empty string
 	if strings.TrimSpace(hxl.Path) == "" {
 		return ""

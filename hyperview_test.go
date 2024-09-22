@@ -18,16 +18,22 @@ func (ma *mockViewAdapter) Init() error { return nil }
 func (ma *mockViewAdapter) Render(w http.ResponseWriter, r *http.Request, resp *response.Response) {
 	ma.renderCalled = true
 }
+
 func (ma *mockViewAdapter) RenderForbidden(w http.ResponseWriter, r *http.Request, resp *response.Response) {
 }
+
 func (ma *mockViewAdapter) RenderMaintenance(w http.ResponseWriter, r *http.Request, resp *response.Response) {
 }
+
 func (ma *mockViewAdapter) RenderMethodNotAllowed(w http.ResponseWriter, r *http.Request, resp *response.Response) {
 }
+
 func (ma *mockViewAdapter) RenderNotFound(w http.ResponseWriter, r *http.Request, resp *response.Response) {
 }
+
 func (ma *mockViewAdapter) RenderSystemError(w http.ResponseWriter, r *http.Request, err error, resp *response.Response) {
 }
+
 func (ma *mockViewAdapter) RenderUnauthorized(w http.ResponseWriter, r *http.Request, resp *response.Response) {
 }
 
@@ -87,7 +93,7 @@ func TestViewService_Redirect(t *testing.T) {
 		t.Fatalf("error creating HyperView: %v", err)
 	}
 
-	var tests = []struct {
+	tests := []struct {
 		name       string
 		request    *http.Request
 		url        string

@@ -46,7 +46,6 @@ func Prompt(r *http.Request) (string, bool) {
 
 // Target returns the HX-Target header, if it exists
 func Target(r *http.Request) (string, bool) {
-
 	if _, ok := r.Header[http.CanonicalHeaderKey(HXTarget)]; !ok {
 		return "", false
 	}

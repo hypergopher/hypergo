@@ -16,7 +16,7 @@ help:
 .PHONY: tidy
 tidy:
 	go mod tidy -v
-	go fmt ./...
+	go run mvdan.cc/gofumpt@latest -w .
 
 ## audit: run quality control checks
 .PHONY: audit
@@ -27,15 +27,15 @@ audit:
 	go run golang.org/x/vuln/cmd/govulncheck@latest ./...
 	go test -race -buildvcs -vet=off ./...
 
-# ==================================================================================== #
-## :
-## DEVELOPMENT:
-# ==================================================================================== #
-
 ## lint: Run the golangci linter
 .PHONY: lint
 lint:
 	golangci-lint run
+
+# ==================================================================================== #
+## :
+## DEVELOPMENT:
+# ==================================================================================== #
 
 ## test: run the go tests
 ## : (use `make test pkg=<path-to-package>` to run a specific package, including integrations)

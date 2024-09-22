@@ -8,7 +8,7 @@ import (
 )
 
 func TestSrcset(t *testing.T) {
-	var tests = []struct {
+	tests := []struct {
 		name   string
 		src    string
 		widths []string

@@ -167,7 +167,7 @@ func (s *HyperView) Reinit() error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	for _, adapter := range s.adapters {
-		//s.logger.Debug("Reinitializing view adapter", slog.String("adapter", fmt.Sprintf("%T", adapter)))
+		// s.logger.Debug("Reinitializing view adapter", slog.String("adapter", fmt.Sprintf("%T", adapter)))
 		if err := adapter.Init(); err != nil {
 			return err
 		}

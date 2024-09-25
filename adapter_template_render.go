@@ -105,7 +105,8 @@ func (a *TemplateAdapter) execTemplate(w http.ResponseWriter, r *http.Request, r
 	// Creating a buffer, so we can capture write errors before we write to the header
 	// Note that layouts are always defined with the same name as the layout file without the extension (e.g. base.html -> base)
 	buf := new(bytes.Buffer)
-	err := tmpl.ExecuteTemplate(buf, resp.TemplateLayout(), resp.ViewData(r).Data())
+	layout := fmt.Sprintf("layout:%s", resp.TemplateLayout())
+	err := tmpl.ExecuteTemplate(buf, layout, resp.ViewData(r).Data())
 	if err != nil {
 		path := a.viewsPath(constants.SystemDir, "server-error")
 		if resp.TemplatePath() == path {

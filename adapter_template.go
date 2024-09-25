@@ -57,7 +57,7 @@ func (a *TemplateAdapter) Init() error {
 	// Reset the template cache
 	a.templates = make(map[string]*template.Template)
 
-	baseTemplate, err := a.loadPartials()
+	commonTemplates, err := a.loadCommonTemplates()
 	if err != nil {
 		return fmt.Errorf("error loading partials. %w", err)
 	}
@@ -79,11 +79,9 @@ func (a *TemplateAdapter) Init() error {
 					pageName = fsID + ":" + pageName
 				}
 
-				//a.logger.Debug("Loading template with layouts", slog.String("path", path), slog.String("pageName", pageName))
-				// Include the layout template in the page template
-				layoutPath := constants.LayoutsDir + "/*" + a.extension
-				// Clone the base template and parse the page template
-				tmpl, err := template.Must(baseTemplate.Clone()).ParseFS(fsys, layoutPath, path)
+				// Clone the common templates and parse the page template, so we can reuse the common templates for variants
+				tmpl, err := template.Must(commonTemplates.Clone()).ParseFS(fsys, path)
+
 				if err != nil {
 					return err
 				}
@@ -92,7 +90,7 @@ func (a *TemplateAdapter) Init() error {
 			return nil
 		}
 
-		// If the "views" directory exists, parse it. Otherwise, parse the root directory
+		// If the "views" directory exists, parse it.
 		if _, err := fsys.Open(constants.ViewsDir); err == nil {
 			if err := fs.WalkDir(fsys, constants.ViewsDir, processDirectory); err != nil {
 				return err
@@ -101,13 +99,13 @@ func (a *TemplateAdapter) Init() error {
 	}
 
 	// Uncomment to view the template names found
-	a.printTemplateNames()
+	//a.printTemplateNames()
 
 	return nil
 }
 
-func (a *TemplateAdapter) loadPartials() (*template.Template, error) {
-	baseTemplate := template.New("_base_").Funcs(a.funcMap)
+func (a *TemplateAdapter) loadCommonTemplates() (*template.Template, error) {
+	commonTemplates := template.New("_common_").Funcs(a.funcMap)
 
 	for _, fsys := range a.fileSystemMap {
 		processPartials := func(path string, d fs.DirEntry, err error) error {
@@ -117,7 +115,10 @@ func (a *TemplateAdapter) loadPartials() (*template.Template, error) {
 
 			if !d.IsDir() && filepath.Ext(path) == a.extension {
 				fullPath := path
-				_, err := baseTemplate.ParseFS(fsys, fullPath)
+
+				layoutPath := constants.LayoutsDir + "/*" + a.extension
+				_, err := commonTemplates.ParseFS(fsys, layoutPath, fullPath)
+
 				if err != nil {
 					return err
 				}
@@ -133,7 +134,7 @@ func (a *TemplateAdapter) loadPartials() (*template.Template, error) {
 		}
 	}
 
-	return baseTemplate, nil
+	return commonTemplates, nil
 }
 
 func (a *TemplateAdapter) printTemplateNames() {

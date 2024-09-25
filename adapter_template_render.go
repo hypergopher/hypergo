@@ -14,9 +14,9 @@ import (
 )
 
 func (a *TemplateAdapter) Render(w http.ResponseWriter, r *http.Request, resp *response.Response) {
-	tmpl, err := a.getTemplate(resp)
-	if err != nil {
-		a.handleError(w, r, err)
+	tmpl, ok := a.templates[resp.TemplatePath()]
+	if !ok {
+		a.handleError(w, r, fmt.Errorf("template not found: %s", resp.TemplatePath()))
 		return
 	}
 
@@ -101,34 +101,11 @@ func (a *TemplateAdapter) handleError(w http.ResponseWriter, r *http.Request, er
 	}
 }
 
-func (a *TemplateAdapter) getTemplate(resp *response.Response) (*template.Template, error) {
-	// Retrieve the preloaded page template from the cache
-	pageTmpl, ok := a.templates[resp.TemplatePath()]
-	if !ok {
-		return nil, fmt.Errorf("template not found: %s", resp.TemplatePath())
-	}
-
-	// Clone the page template to avoid altering the original cached template
-	tmpl, err := pageTmpl.Clone()
-	if err != nil {
-		return nil, fmt.Errorf("error cloning template: %w", err)
-	}
-
-	// Combine the page with its layout template from the embedded filesystem
-	layoutPath := constants.LayoutsDir + "/" + resp.TemplateLayout() + a.extension
-	tmpl, err = tmpl.ParseFS(a.fileSystemMap[constants.RootFSID], layoutPath)
-	if err != nil {
-		return nil, fmt.Errorf("error parsing layout: %w", err)
-	}
-
-	return tmpl, nil
-}
-
 func (a *TemplateAdapter) execTemplate(w http.ResponseWriter, r *http.Request, resp *response.Response, tmpl *template.Template) {
 	// Creating a buffer, so we can capture write errors before we write to the header
-	// Note that layouts are always defined as "layout" in the templates
+	// Note that layouts are always defined with the same name as the layout file without the extension (e.g. base.html -> base)
 	buf := new(bytes.Buffer)
-	err := tmpl.ExecuteTemplate(buf, "layout", resp.ViewData(r).Data())
+	err := tmpl.ExecuteTemplate(buf, resp.TemplateLayout(), resp.ViewData(r).Data())
 	if err != nil {
 		path := a.viewsPath(constants.SystemDir, "server-error")
 		if resp.TemplatePath() == path {

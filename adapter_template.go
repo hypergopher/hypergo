@@ -79,8 +79,11 @@ func (a *TemplateAdapter) Init() error {
 					pageName = fsID + ":" + pageName
 				}
 
+				//a.logger.Debug("Loading template with layouts", slog.String("path", path), slog.String("pageName", pageName))
+				// Include the layout template in the page template
+				layoutPath := constants.LayoutsDir + "/*" + a.extension
 				// Clone the base template and parse the page template
-				tmpl, err := template.Must(baseTemplate.Clone()).ParseFS(fsys, path)
+				tmpl, err := template.Must(baseTemplate.Clone()).ParseFS(fsys, layoutPath, path)
 				if err != nil {
 					return err
 				}
@@ -96,14 +99,15 @@ func (a *TemplateAdapter) Init() error {
 			}
 		}
 	}
+
 	// Uncomment to view the template names found
-	// a.printTemplateNames()
+	a.printTemplateNames()
 
 	return nil
 }
 
 func (a *TemplateAdapter) loadPartials() (*template.Template, error) {
-	baseTemplate := template.New("base").Funcs(a.funcMap)
+	baseTemplate := template.New("_base_").Funcs(a.funcMap)
 
 	for _, fsys := range a.fileSystemMap {
 		processPartials := func(path string, d fs.DirEntry, err error) error {

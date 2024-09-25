@@ -47,6 +47,15 @@ test:
 		go test -coverprofile=cover.out ${pkg}; \
 	fi
 
+## test/coverage: display coverage and indicate if it is less than 80%
+.PHONY: test/coverage
+test/coverage:
+	@go tool cover -func=cover.out | grep "total:" | awk '{print ((int($$3) > 80) != 1) ? "Coverage is less than 80%": "Coverage is greater than 80%"}'
+
+## test/report: display coverage report
+test/report:
+	@go tool cover -html=cover.out
+
 ## serve-docs: generate the godoc documentation and serve it on localhost:6060
 .PHONY: serve-docs
 serve-docs:
